@@ -4,6 +4,7 @@ export interface PhotoLists {
   id: string;
   urls: {
     small: string;
+    thumb: string;
   };
 }
 
@@ -18,12 +19,21 @@ export interface APhoto {
     city: string;
     country: string;
   };
-  links: {
-    download: string;
-  };
   user: {
     username: string;
+    profile_image: {
+      medium: string;
+    };
+    instagram_username: string;
   };
+  urls: {
+    full: string;
+    raw: string;
+    regular: string;
+    small: string;
+  };
+  width: number;
+  height: number;
 }
 
 export interface photoApi {
