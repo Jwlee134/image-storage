@@ -1,27 +1,22 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
-import { photos } from "../api";
-import { PhotoLists } from "../types";
 import Input from "./Input";
 import ListItem from "./ListItem";
 import "../css/masonry.css";
 import Masonry from "react-masonry-css";
-
-const Container = styled.div`
-  width: 80%;
-  margin: auto;
-  text-align: center;
-`;
+import { useDispatch, useSelector } from "react-redux";
+import { fetchHomeList } from "../store/home";
+import { RootState } from "../store";
 
 const Target = styled.div`
   height: 20px;
 `;
 
 const Home = () => {
-  const [list, setList] = useState<PhotoLists[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { list, loading } = useSelector((state: RootState) => state.home);
+  const dispatch = useDispatch();
 
-  const page = useRef(1);
+  const page = useRef<number>(1);
   const target = useRef<HTMLDivElement>(null);
 
   const fetchAgain = async (
@@ -29,7 +24,8 @@ const Home = () => {
     observer: IntersectionObserver
   ) => {
     observer.unobserve(entry.target);
-    await fetchList();
+    page.current++;
+    dispatch(fetchHomeList(page.current));
   };
 
   const callback = (
@@ -43,27 +39,13 @@ const Home = () => {
     });
   };
 
-  const fetchList = async () => {
-    try {
-      const { data } = await photos.getList(page.current);
-      setList([...list, ...data]);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-      page.current++;
-    }
-  };
-
   useEffect(() => {
-    fetchList();
-  }, []);
+    dispatch(fetchHomeList(page.current));
+  }, [dispatch]);
 
   useEffect(() => {
     if (target.current !== null) {
-      let observer = new IntersectionObserver(callback, {
-        rootMargin: "500px",
-      });
+      let observer = new IntersectionObserver(callback);
       observer.observe(target.current);
     }
   });
