@@ -7,20 +7,25 @@ const Container = styled.div`
   background-color: white;
   box-shadow: 0 3px 3px 0 #ccc;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 `;
 
-const Text = styled.span`
+const Text = styled.div`
   font-size: 30px;
-  @import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap");
-  font-family: "Dancing Script", cursive;
+  margin-bottom: 10px;
+`;
+
+const SmallText = styled.div`
+  font-size: 10px;
 `;
 
 const Header = () => {
   return (
     <Container>
-      <Text>Image Hunter</Text>
+      <Text>Image Storage</Text>
+      <SmallText>Powered By Unsplash API</SmallText>
     </Container>
   );
 };
