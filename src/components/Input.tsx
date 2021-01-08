@@ -3,10 +3,14 @@ import styled from "styled-components";
 
 const Container = styled.div`
   width: 100%;
-  height: 80px;
+  height: auto;
   display: flex;
   align-items: center;
-  margin-top: 8px;
+  margin-top: 28px;
+  margin-bottom: 8px;
+  position: sticky;
+  top: 20px;
+  z-index: 1;
 `;
 
 const Form = styled.form`
@@ -45,7 +49,7 @@ const Input = () => {
       <Form onSubmit={handleSubmit}>
         <SInput
           type="text"
-          placeholder="키워드로 검색..."
+          placeholder="Search"
           onChange={handleChange}
           value={value}
         />
