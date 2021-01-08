@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { PhotoLists } from "../types";
 import Detail from "./Detail";
 import ModalPortal from "./ModalPortal";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { CloseFontAwesomeIcon } from "../css/detail";
 
 const Item = styled.div`
   width: 100%;
@@ -14,6 +16,7 @@ const Item = styled.div`
   cursor: pointer;
   &:hover {
     transform: scale(1.01);
+    box-shadow: 4px 4px 8px 0 #ccc;
   }
 `;
 
@@ -32,18 +35,35 @@ const List = ({ item }: IProps) => {
     id,
   } = item;
 
-  const handleClick = () => {
+  const openModal = () => {
     setIsModal(true);
+    document.body.classList.add("openModal");
+    document.body.classList.remove("closeModal");
   };
 
-  return !isModal ? (
-    <Item onClick={handleClick}>
-      <Img alt={id} src={thumb} />
-    </Item>
-  ) : (
-    <ModalPortal>
-      <Detail id={id} />
-    </ModalPortal>
+  const closeModal = () => {
+    setIsModal(false);
+    document.body.classList.remove("openModal");
+    document.body.classList.add("closeModal");
+  };
+
+  return (
+    <>
+      <Item onClick={openModal}>
+        <Img alt={id} src={thumb} />
+      </Item>
+      {isModal && (
+        <ModalPortal>
+          <Detail id={id} setIsModal={setIsModal}>
+            <CloseFontAwesomeIcon
+              icon={faTimes}
+              size="lg"
+              onClick={closeModal}
+            />
+          </Detail>
+        </ModalPortal>
+      )}
+    </>
   );
 };
 
