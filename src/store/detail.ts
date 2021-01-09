@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { photos } from "../api";
-import { APhoto } from "../types";
+import { Photo } from "../types";
 
 interface IState {
-  item: APhoto | null;
+  item: Photo | null;
   loading: boolean;
   error: string | null;
 }

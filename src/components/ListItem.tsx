@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { PhotoLists } from "../types";
+import { Photo } from "../types";
 import Detail from "./Detail";
 import ModalPortal from "./ModalPortal";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
@@ -25,7 +25,7 @@ const Img = styled.img`
 `;
 
 interface IProps {
-  item: PhotoLists;
+  item: Photo;
 }
 
 const List = ({ item }: IProps) => {

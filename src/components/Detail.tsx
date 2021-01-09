@@ -92,7 +92,7 @@ const Detail = ({ id, children, setIsModal }: IId) => {
             </ImgContainer>
             <InfoContainer>
               <InfoColumn>
-                {item?.location.city || item?.location.country ? (
+                {item?.location?.city || item?.location?.country ? (
                   <>
                     <ColumnText>
                       <AreaFontAwesomeIcon icon={faMapMarkerAlt} />
