@@ -13,35 +13,29 @@ const Target = styled.div`
 `;
 
 const Home = () => {
-  const { list, loading } = useSelector((state: RootState) => state.home);
+  const { list, loading } = useSelector((state: RootState) => state.home.home);
   const dispatch = useDispatch();
 
-  const page = useRef<number>(1);
   const target = useRef<HTMLDivElement>(null);
-
-  const fetchAgain = async (
-    entry: IntersectionObserverEntry,
-    observer: IntersectionObserver
-  ) => {
-    observer.unobserve(entry.target);
-    page.current++;
-    dispatch(fetchHomeList(page.current));
-  };
+  const page = useRef<number>(1);
 
   const callback = (
     entries: IntersectionObserverEntry[],
     observer: IntersectionObserver
   ) => {
     entries.forEach((entry) => {
+      console.log(entry);
       if (entry.isIntersecting) {
-        fetchAgain(entry, observer);
+        observer.unobserve(entry.target);
+        page.current++;
+        dispatch(fetchHomeList(page.current));
       }
     });
   };
 
   useEffect(() => {
     dispatch(fetchHomeList(page.current));
-  }, [dispatch]);
+  }, [dispatch, page]);
 
   useEffect(() => {
     if (target.current !== null) {
@@ -54,7 +48,6 @@ const Home = () => {
     default: 4,
     1100: 3,
     768: 2,
-    500: 1,
   };
 
   return loading ? (
