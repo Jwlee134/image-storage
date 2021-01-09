@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -31,10 +32,12 @@ const SInput = styled.input`
 
 const Input = () => {
   const [value, setValue] = useState("");
+  const history = useHistory();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(value);
+    history.push(`/search?term=${value}`);
+    window.scrollTo(0, 0);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

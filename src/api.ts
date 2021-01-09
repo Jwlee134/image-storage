@@ -1,5 +1,5 @@
 import axios from "axios";
-import { photoApi } from "./types";
+import { PhotoApi } from "./types";
 
 const api = axios.create({
   baseURL: "https://api.unsplash.com",
@@ -8,13 +8,21 @@ const api = axios.create({
   },
 });
 
-export const photos: photoApi = {
+export const photos: PhotoApi = {
   getList: (page = 1) =>
     api.get("/photos", {
       params: {
-        per_page: 20,
+        per_page: 30,
         page,
       },
     }),
-  getOne: (id: string) => api.get(`/photos/${id}`),
+  getOne: (id) => api.get(`/photos/${id}`),
+  search: (page = 1, term) =>
+    api.get("/search/photos", {
+      params: {
+        query: term,
+        per_page: 30,
+        page,
+      },
+    }),
 };
