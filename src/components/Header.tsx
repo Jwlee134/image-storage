@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -24,7 +25,9 @@ const SmallText = styled.div`
 const Header = () => {
   return (
     <Container>
-      <Text>Image Storage</Text>
+      <Link to="/">
+        <Text>Image Storage</Text>
+      </Link>
       <SmallText>Powered By Unsplash API</SmallText>
     </Container>
   );
