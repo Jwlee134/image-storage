@@ -2,6 +2,7 @@
 - [x] Unsplash API
 - [x] Infinite Scroll
 - [x] Modal (React Portal)
+- [x] Masonry Layout
 
 # Preview
 
