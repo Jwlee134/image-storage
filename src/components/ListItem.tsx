@@ -10,6 +10,9 @@ const Item = styled.div`
   width: 100%;
   margin-bottom: 30px;
   padding: 10px;
+  @media screen and (max-width: 500px) {
+    padding: 5px;
+  }
   background-color: white;
   box-shadow: 2px 2px 4px 0 #ccc;
   transition: all 0.1s linear;

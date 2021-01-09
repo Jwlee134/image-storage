@@ -43,7 +43,6 @@ const Search = () => {
 
   useEffect(() => {
     if (target.current !== null) {
-      console.log("Mounted");
       let observer = new IntersectionObserver(callback, {
         rootMargin: "500px",
       });
@@ -55,7 +54,6 @@ const Search = () => {
     default: 4,
     1100: 3,
     768: 2,
-    500: 1,
   };
 
   return loading ? (
