@@ -39,7 +39,9 @@ const Home = () => {
 
   useEffect(() => {
     if (target.current !== null) {
-      let observer = new IntersectionObserver(callback);
+      let observer = new IntersectionObserver(callback, {
+        rootMargin: "500px",
+      });
       observer.observe(target.current);
     }
   });
