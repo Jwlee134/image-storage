@@ -6,7 +6,7 @@ const initialState: IState = {
   home: {
     list: [],
     error: null,
-    loading: true,
+    loading: false,
   },
   search: {
     searchList: [],
@@ -27,6 +27,18 @@ export const fetchHomeList = createAsyncThunk(
   }
 );
 
+export const fetchMoreHomeList = createAsyncThunk(
+  "home/fetchMoreHomeList",
+  async (page: number, { rejectWithValue }) => {
+    try {
+      const { data } = await photos.getList(page);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const fetchSearchList = createAsyncThunk(
   "home/fetchSearchList",
   async ({ page, term }: SearchParams, { rejectWithValue }) => {
@@ -36,7 +48,6 @@ export const fetchSearchList = createAsyncThunk(
       } = await photos.search(page, term);
       return results;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error.response.data);
     }
   }
@@ -62,14 +73,26 @@ const homeSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      .addCase(fetchHomeList.pending, (state, action) => {
+        state.home.list = [];
+        state.home.loading = true;
+      })
       .addCase(fetchHomeList.fulfilled, (state, action) => {
-        state.home.list.push(...action.payload);
+        state.home.list = action.payload;
         state.home.loading = false;
       })
       .addCase(fetchHomeList.rejected, (state, action) => {
         state.home.error = action.payload as string;
       })
+      .addCase(fetchMoreHomeList.fulfilled, (state, action) => {
+        state.home.list.push(...action.payload);
+        state.home.loading = false;
+      })
+      .addCase(fetchMoreHomeList.rejected, (state, action) => {
+        state.home.error = action.payload as string;
+      })
       .addCase(fetchSearchList.pending, (state, action) => {
+        state.search.searchList = [];
         state.search.loading = true;
       })
       .addCase(fetchSearchList.fulfilled, (state, action) => {

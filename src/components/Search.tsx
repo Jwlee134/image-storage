@@ -1,11 +1,12 @@
 import React, { useEffect, useRef } from "react";
-import Masonry from "react-masonry-css";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import useQuery from "../hooks/useQuery";
 import { RootState } from "../store";
 import { fetchMoreSearchList, fetchSearchList } from "../store/home";
+import triggerObserver from "../utils/triggerObserver";
 import Input from "./Input";
+import Layout from "./Layout";
 import ListItem from "./ListItem";
 
 const Target = styled.div`
@@ -16,7 +17,7 @@ const Search = () => {
   const term = useQuery() as string;
   const dispatch = useDispatch();
 
-  const page = useRef<number>(2);
+  const page = useRef<number>(1);
   const target = useRef<HTMLDivElement>(null);
 
   const { searchList, loading } = useSelector(
@@ -24,53 +25,44 @@ const Search = () => {
   );
 
   const callback = (
-    entries: IntersectionObserverEntry[],
+    [entry]: IntersectionObserverEntry[],
     observer: IntersectionObserver
   ) => {
-    entries.forEach((entry) => {
-      console.log(entry);
-      if (entry.isIntersecting) {
-        observer.unobserve(entry.target);
-        dispatch(fetchMoreSearchList({ page: page.current, term }));
-        page.current++;
-      }
-    });
+    console.log(entry.isIntersecting);
+    if (entry.isIntersecting) {
+      observer.unobserve(entry.target);
+      page.current++;
+      dispatch(fetchMoreSearchList({ page: page.current, term }));
+    }
   };
 
   useEffect(() => {
-    dispatch(fetchSearchList({ page: 1, term }));
+    page.current = 1;
+    dispatch(fetchSearchList({ page: page.current, term }));
   }, [dispatch, term]);
 
   useEffect(() => {
-    if (target.current !== null) {
-      let observer = new IntersectionObserver(callback, {
-        rootMargin: "500px",
-      });
-      observer.observe(target.current);
-    }
+    triggerObserver({
+      target: target.current,
+      callback,
+    });
   });
 
-  const breakpointColumnsObj = {
-    default: 4,
-    1100: 3,
-    768: 2,
-  };
-
-  return loading ? (
-    <></>
-  ) : (
+  return (
     <>
       <Input />
-      <Masonry
-        breakpointCols={breakpointColumnsObj}
-        className="my-masonry-grid"
-        columnClassName="my-masonry-grid_column"
-      >
-        {searchList.map((item, index) => (
-          <ListItem key={index} item={item} />
-        ))}
-      </Masonry>
-      <Target ref={target}></Target>
+      {loading ? (
+        <></>
+      ) : (
+        <>
+          <Layout>
+            {searchList.map((item, index) => (
+              <ListItem key={index} item={item} />
+            ))}
+          </Layout>
+          <Target ref={target}></Target>
+        </>
+      )}
     </>
   );
 };
