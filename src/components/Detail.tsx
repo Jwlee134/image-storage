@@ -1,5 +1,5 @@
 import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Container,
@@ -32,25 +32,17 @@ interface IId {
 const Detail = ({ id, children, setIsModal }: IId) => {
   const { item, loading } = useSelector((state: RootState) => state.detail);
   const dispatch = useDispatch();
+  const [toggleReadMore, setToggleReadMore] = useState(false);
+  const container = useRef<HTMLDivElement | null>(null);
 
-  const handleReadMore = () => {
-    const short = document.querySelector("#short");
-    const dots = document.querySelector("#dots");
-    const readMore = document.querySelector("#readMore");
-    const description = document.querySelector("#description");
-    short?.classList.add("hide");
-    readMore?.classList.add("hide");
-    dots?.classList.add("hide");
-    (description as any).innerHTML = item?.description;
-  };
+  const handleReadMore = () => setToggleReadMore((prev) => !prev);
 
   const handleClick = useCallback(
     (e: MouseEvent) => {
-      const target = document.querySelector(".not-content-area");
-      if (e.target === target) {
+      if (!container) return;
+      if (e.target === container.current) {
         setIsModal(false);
-        document.body.classList.remove("openModal");
-        document.body.classList.add("closeModal");
+        document.body.style.overflow = "unset";
       }
     },
     [setIsModal]
@@ -63,7 +55,7 @@ const Detail = ({ id, children, setIsModal }: IId) => {
   }, [dispatch, id, handleClick]);
 
   return (
-    <Container className="not-content-area">
+    <Container ref={container}>
       <DetailContainer>
         {loading ? (
           ""
@@ -103,15 +95,16 @@ const Detail = ({ id, children, setIsModal }: IId) => {
                     </ColumnText>
                   </>
                 ) : null}
-                <ColumnText id="description">
-                  {item?.description && item!.description.length > 50 ? (
+                <ColumnText>
+                  {item?.description && item.description.length > 50 ? (
                     <>
-                      <span id="short">
-                        {item?.description.substring(0, 49)}
-                      </span>
-                      <span id="dots">... </span>
-                      <ReadMore id="readMore" onClick={handleReadMore}>
-                        Read More
+                      {toggleReadMore ? (
+                        <span>{item?.description} </span>
+                      ) : (
+                        <span>{item?.description.substring(0, 49)}... </span>
+                      )}
+                      <ReadMore onClick={handleReadMore}>
+                        {toggleReadMore ? "Hide" : "Read More"}
                       </ReadMore>
                     </>
                   ) : (

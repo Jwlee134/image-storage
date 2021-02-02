@@ -15,15 +15,6 @@ const GlobalStyles = createGlobalStyle`
         text-decoration:none;
         color:black;
      }
-     .openModal{
-         overflow:hidden;
-     }
-     .closeModal{
-         overflow:auto;
-     }
-     .hide{
-         display:none;
-     }
 `;
 
 export default GlobalStyles;

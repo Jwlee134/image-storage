@@ -40,14 +40,12 @@ const List = ({ item }: IProps) => {
 
   const openModal = () => {
     setIsModal(true);
-    document.body.classList.add("openModal");
-    document.body.classList.remove("closeModal");
+    document.body.style.overflow = "hidden";
   };
 
   const closeModal = () => {
     setIsModal(false);
-    document.body.classList.remove("openModal");
-    document.body.classList.add("closeModal");
+    document.body.style.overflow = "unset";
   };
 
   return (
