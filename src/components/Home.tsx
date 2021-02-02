@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchHomeList, fetchMoreHomeList } from "../store/home";
 import { RootState } from "../store";
 import Layout from "./Layout";
-import triggerObserver from "../utils/triggerObserver";
+import useIntersectionObserver from "../hooks/useIntersectionObserver";
 
 const Target = styled.div`
   height: 20px;
@@ -19,26 +19,23 @@ const Home = () => {
   const page = useRef<number>(1);
   const target = useRef<HTMLDivElement>(null);
 
+  const callback = (
+    [entry]: IntersectionObserverEntry[],
+    observer: IntersectionObserver
+  ) => {
+    if (entry.isIntersecting) {
+      observer.unobserve(entry.target);
+      page.current++;
+      dispatch(fetchMoreHomeList(page.current));
+    }
+  };
+
   useEffect(() => {
     page.current = 1;
     dispatch(fetchHomeList(page.current));
   }, [dispatch, page]);
 
-  useEffect(() => {
-    triggerObserver({
-      target: target.current,
-      callback: (
-        [entry]: IntersectionObserverEntry[],
-        observer: IntersectionObserver
-      ) => {
-        if (entry.isIntersecting) {
-          observer.unobserve(entry.target);
-          page.current++;
-          dispatch(fetchMoreHomeList(page.current));
-        }
-      },
-    });
-  });
+  useIntersectionObserver(target, callback);
 
   return (
     <>

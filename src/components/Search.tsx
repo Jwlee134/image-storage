@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import useIntersectionObserver from "../hooks/useIntersectionObserver";
 import useQuery from "../hooks/useQuery";
 import { RootState } from "../store";
 import { fetchMoreSearchList, fetchSearchList } from "../store/home";
-import triggerObserver from "../utils/triggerObserver";
 import Input from "./Input";
 import Layout from "./Layout";
 import ListItem from "./ListItem";
@@ -28,7 +28,6 @@ const Search = () => {
     [entry]: IntersectionObserverEntry[],
     observer: IntersectionObserver
   ) => {
-    console.log(entry.isIntersecting);
     if (entry.isIntersecting) {
       observer.unobserve(entry.target);
       page.current++;
@@ -36,17 +35,12 @@ const Search = () => {
     }
   };
 
+  useIntersectionObserver(target, callback);
+
   useEffect(() => {
     page.current = 1;
     dispatch(fetchSearchList({ page: page.current, term }));
   }, [dispatch, term]);
-
-  useEffect(() => {
-    triggerObserver({
-      target: target.current,
-      callback,
-    });
-  });
 
   return (
     <>

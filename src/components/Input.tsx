@@ -36,8 +36,10 @@ const Input = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    window.scrollTo(0, 0);
-    history.push(`/search?term=${value}`);
+    if (value !== "") {
+      window.scrollTo(0, 0);
+      history.push(`/search?term=${value}`);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
