@@ -1,7 +1,7 @@
 # Image Storage
 - [x] Unsplash API
-- [x] Infinite Scroll
-- [x] Modal (React Portal)
+- [x] Infinite Scroll using Intersection Observer API
+- [x] Modal using React Portal
 - [x] Masonry Layout
 
 # Preview
